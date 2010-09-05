@@ -51,7 +51,8 @@ var showFileChanges = function(file, cached) {
 	hideState();
 
 	$("contextSize").oninput = function(element) {
-		contextSize = $("contextSize").value;
+		contextLines = $("contextSize").value;
+		Controller.refresh();
 	}
 
 	if (file.status == 0) // New file?
