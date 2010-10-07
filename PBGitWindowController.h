@@ -27,6 +27,7 @@
 
 	PBViewController* viewController;
 
+	IBOutlet NSToolbarItem *textmateItem;
 	IBOutlet NSToolbarItem *terminalItem;
 	IBOutlet NSToolbarItem *finderItem;
 }
@@ -46,6 +47,7 @@
 - (IBAction) showHistoryView:(id)sender;
 - (IBAction) revealInFinder:(id)sender;
 - (IBAction) openInTerminal:(id)sender;
+- (IBAction) openInTextMate:(id)sender;
 - (IBAction) cloneTo:(id)sender;
 - (IBAction) refresh:(id)sender;
 

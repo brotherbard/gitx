@@ -69,6 +69,9 @@
 	NSImage *terminalImage = [[NSWorkspace sharedWorkspace] iconForFile:@"/Applications/Utilities/Terminal.app/"];
 	[terminalItem setImage:terminalImage];
 
+	NSImage *textmateImage = [[NSWorkspace sharedWorkspace] iconForFile:@"/Applications/TextMate.app/"];
+	[textmateItem setImage:textmateImage];
+
 	[self showWindow:nil];
 }
 
@@ -150,6 +153,16 @@
 	TerminalApplication *term = [SBApplication applicationWithBundleIdentifier: @"com.apple.Terminal"];
 	NSString *workingDirectory = [[repository workingDirectory] stringByAppendingString:@"/"];
 	NSString *cmd = [NSString stringWithFormat: @"cd \"%@\"; clear; echo '# Opened by GitX:'; git status", workingDirectory];
+	[term doScript: cmd in: nil];
+	[NSThread sleepForTimeInterval: 0.1];
+	[term activate];
+}
+
+- (IBAction) openInTextMate:(id)sender
+{
+	TerminalApplication *term = [SBApplication applicationWithBundleIdentifier: @"com.apple.Terminal"];
+	NSString *workingDirectory = [[repository workingDirectory] stringByAppendingString:@"/"];
+	NSString *cmd = [NSString stringWithFormat: @"mate \"%@\"; exit", workingDirectory];
 	[term doScript: cmd in: nil];
 	[NSThread sleepForTimeInterval: 0.1];
 	[term activate];

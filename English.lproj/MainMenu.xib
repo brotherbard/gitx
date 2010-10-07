@@ -12,6 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
+			<integer value="29"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -729,6 +730,15 @@
 									<reference key="NSOnImage" ref="889736156"/>
 									<reference key="NSMixedImage" ref="37108609"/>
 								</object>
+								<object class="NSMenuItem" id="191669047">
+									<reference key="NSMenu" ref="944982980"/>
+									<string key="NSTitle">Open in TextMate</string>
+									<string key="NSKeyEquiv">O</string>
+									<int key="NSKeyEquivModMask">1048576</int>
+									<int key="NSMnemonicLoc">2147483647</int>
+									<reference key="NSOnImage" ref="889736156"/>
+									<reference key="NSMixedImage" ref="37108609"/>
+								</object>
 							</object>
 						</object>
 					</object>
@@ -1366,6 +1376,14 @@
 						<reference key="destination" ref="219112383"/>
 					</object>
 					<int key="connectionID">968</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">openInTextMate:</string>
+						<reference key="source" ref="954860085"/>
+						<reference key="destination" ref="191669047"/>
+					</object>
+					<int key="connectionID">972</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2030,6 +2048,7 @@
 							<reference ref="950917510"/>
 							<reference ref="416044880"/>
 							<reference ref="173376826"/>
+							<reference ref="191669047"/>
 						</object>
 						<reference key="parent" ref="571164270"/>
 					</object>
@@ -2077,6 +2096,11 @@
 						<int key="objectID">964</int>
 						<reference key="object" ref="220492206"/>
 						<reference key="parent" ref="227303002"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">970</int>
+						<reference key="object" ref="191669047"/>
+						<reference key="parent" ref="944982980"/>
 					</object>
 				</object>
 			</object>
@@ -2280,6 +2304,7 @@
 					<string>956.IBPluginDependency</string>
 					<string>964.IBPluginDependency</string>
 					<string>964.ImportedFromIB2</string>
+					<string>970.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2348,7 +2373,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{522, 767}, {240, 263}}</string>
+					<string>{{522, 723}, {240, 263}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{455, 493}, {243, 243}}</string>
@@ -2398,7 +2423,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{809, 663}, {194, 73}}</string>
+					<string>{{707, 913}, {194, 73}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2409,13 +2434,13 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{419, 1030}, {420, 20}}</string>
+					<string>{{419, 986}, {420, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{297, 739}, {329, 20}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{790, 533}, {231, 173}}</string>
+					<string>{{657, 813}, {231, 173}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{499, 623}, {234, 113}}</string>
@@ -2447,7 +2472,7 @@
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
-					<string>{{582, 493}, {196, 243}}</string>
+					<string>{{480, 743}, {196, 243}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 					<string>{{358, 536}, {199, 203}}</string>
@@ -2467,7 +2492,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{566, 917}, {206, 113}}</string>
+					<string>{{566, 853}, {211, 133}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -2479,6 +2504,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -2497,7 +2523,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">968</int>
+			<int key="maxID">972</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -2913,11 +2939,13 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>commit:</string>
+							<string>forceCommit:</string>
 							<string>refresh:</string>
 							<string>signOff:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -2928,6 +2956,7 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>commit:</string>
+							<string>forceCommit:</string>
 							<string>refresh:</string>
 							<string>signOff:</string>
 						</object>
@@ -2935,6 +2964,10 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<object class="IBActionInfo">
 								<string key="name">commit:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">forceCommit:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -3035,6 +3068,8 @@
 							<string>openSelectedFile:</string>
 							<string>rebase:</string>
 							<string>refresh:</string>
+							<string>selectNext:</string>
+							<string>selectPrevious:</string>
 							<string>setBranchFilter:</string>
 							<string>setDetailedView:</string>
 							<string>setTreeView:</string>
@@ -3045,6 +3080,8 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3074,6 +3111,8 @@
 							<string>openSelectedFile:</string>
 							<string>rebase:</string>
 							<string>refresh:</string>
+							<string>selectNext:</string>
+							<string>selectPrevious:</string>
 							<string>setBranchFilter:</string>
 							<string>setDetailedView:</string>
 							<string>setTreeView:</string>
@@ -3114,6 +3153,14 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">refresh:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">selectNext:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">selectPrevious:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -3397,6 +3444,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>cloneTo:</string>
 							<string>openInTerminal:</string>
+							<string>openInTextMate:</string>
 							<string>refresh:</string>
 							<string>revealInFinder:</string>
 							<string>showCommitView:</string>
@@ -3404,6 +3452,7 @@
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -3418,6 +3467,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>cloneTo:</string>
 							<string>openInTerminal:</string>
+							<string>openInTextMate:</string>
 							<string>refresh:</string>
 							<string>revealInFinder:</string>
 							<string>showCommitView:</string>
@@ -3431,6 +3481,10 @@
 							</object>
 							<object class="IBActionInfo">
 								<string key="name">openInTerminal:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">openInTextMate:</string>
 								<string key="candidateClassName">id</string>
 							</object>
 							<object class="IBActionInfo">
@@ -3463,6 +3517,7 @@
 							<string>splitView</string>
 							<string>statusField</string>
 							<string>terminalItem</string>
+							<string>textmateItem</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3473,6 +3528,7 @@
 							<string>NSView</string>
 							<string>NSSplitView</string>
 							<string>NSTextField</string>
+							<string>NSToolbarItem</string>
 							<string>NSToolbarItem</string>
 						</object>
 					</object>
@@ -3488,6 +3544,7 @@
 							<string>splitView</string>
 							<string>statusField</string>
 							<string>terminalItem</string>
+							<string>textmateItem</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3521,6 +3578,10 @@
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">terminalItem</string>
+								<string key="candidateClassName">NSToolbarItem</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">textmateItem</string>
 								<string key="candidateClassName">NSToolbarItem</string>
 							</object>
 						</object>
@@ -3641,14 +3702,42 @@
 					<string key="className">PBHistorySearchController</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="actions">
-						<string key="NS.key.0">stepperPressed:</string>
-						<string key="NS.object.0">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>selectSearchMode:</string>
+							<string>stepperPressed:</string>
+							<string>updateSearch:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>id</string>
+							<string>id</string>
+							<string>id</string>
+						</object>
 					</object>
 					<object class="NSMutableDictionary" key="actionInfosByName">
-						<string key="NS.key.0">stepperPressed:</string>
-						<object class="IBActionInfo" key="NS.object.0">
-							<string key="name">stepperPressed:</string>
-							<string key="candidateClassName">id</string>
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>selectSearchMode:</string>
+							<string>stepperPressed:</string>
+							<string>updateSearch:</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<object class="IBActionInfo">
+								<string key="name">selectSearchMode:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">stepperPressed:</string>
+								<string key="candidateClassName">id</string>
+							</object>
+							<object class="IBActionInfo">
+								<string key="name">updateSearch:</string>
+								<string key="candidateClassName">id</string>
+							</object>
 						</object>
 					</object>
 					<object class="NSMutableDictionary" key="outlets">
@@ -3658,6 +3747,7 @@
 							<string>commitController</string>
 							<string>historyController</string>
 							<string>numberOfMatchesField</string>
+							<string>progressIndicator</string>
 							<string>searchField</string>
 							<string>stepper</string>
 						</object>
@@ -3666,6 +3756,7 @@
 							<string>NSArrayController</string>
 							<string>PBGitHistoryController</string>
 							<string>NSTextField</string>
+							<string>NSProgressIndicator</string>
 							<string>NSSearchField</string>
 							<string>NSSegmentedControl</string>
 						</object>
@@ -3677,6 +3768,7 @@
 							<string>commitController</string>
 							<string>historyController</string>
 							<string>numberOfMatchesField</string>
+							<string>progressIndicator</string>
 							<string>searchField</string>
 							<string>stepper</string>
 						</object>
@@ -3693,6 +3785,10 @@
 							<object class="IBToOneOutletInfo">
 								<string key="name">numberOfMatchesField</string>
 								<string key="candidateClassName">NSTextField</string>
+							</object>
+							<object class="IBToOneOutletInfo">
+								<string key="name">progressIndicator</string>
+								<string key="candidateClassName">NSProgressIndicator</string>
 							</object>
 							<object class="IBToOneOutletInfo">
 								<string key="name">searchField</string>
@@ -4653,13 +4749,6 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
-					</object>
-				</object>
-				<object class="IBPartialClassDescription">
-					<string key="className">NSObject</string>
-					<object class="IBClassDescriptionSource" key="sourceIdentifier">
-						<string key="majorKey">IBFrameworkSource</string>
-						<string key="minorKey">ScriptingBridge.framework/Headers/SBApplication.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
