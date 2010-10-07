@@ -322,7 +322,6 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<reference ref="79199737"/>
 						<reference ref="442829492"/>
-						<reference ref="456656410"/>
 						<reference ref="286515344"/>
 						<reference ref="684497462"/>
 					</object>
@@ -1402,6 +1401,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBFrameworkSource</string>
 						<string key="minorKey">QuartzCore.framework/Headers/CIImageProvider.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">ScriptingBridge.framework/Headers/SBApplication.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
