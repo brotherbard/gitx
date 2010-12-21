@@ -108,7 +108,9 @@ using namespace std;
 	if (showSign)
 		formatString = [formatString stringByAppendingString:@"\01%m"];
 	
-	NSMutableArray *arguments = [NSMutableArray arrayWithObjects:@"log", @"-z", @"--topo-order", @"--children", formatString, nil];
+	BOOL dateOrder = [[NSUserDefaults standardUserDefaults] boolForKey:@"PBHistoryInDateOrder"];
+	NSString *order = dateOrder ? @"--date-order" : @"--topo-order";
+	NSMutableArray *arguments = [NSMutableArray arrayWithObjects:@"log", @"-z", order, @"--children", formatString, nil];
 
 	if (!rev)
 		[arguments addObject:@"HEAD"];
