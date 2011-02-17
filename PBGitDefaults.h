@@ -13,6 +13,8 @@
 
 + (int) commitMessageViewVerticalLineLength;
 + (BOOL) commitMessageViewHasVerticalLine;
++ (int) commitMessageViewSplitVerticalLineLength;
++ (BOOL) commitMessageViewHasSplitVerticalLine;
 + (BOOL) isGistEnabled;
 + (BOOL) isGravatarEnabled;
 + (BOOL) confirmPublicGists;
