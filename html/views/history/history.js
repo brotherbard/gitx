@@ -66,10 +66,10 @@ var confirm_gist = function(confirmation_message) {
 
 	// Set optional confirmation_message
 	confirmation_message = confirmation_message || "Yes. Paste this commit.";
-	var deleteMessage = Controller.getConfig_("github.token") ? " " : "You might not be able to delete it after posting.<br>";
+	var deleteMessage = Controller.getConfig_("github.token") ? " " : 'Since your <a target="_new" href="http://help.github.com/mac-set-up-git/#_set_up_your_info">github token</a> is not set, you will not be able to delete it.<br>';
 	var publicMessage = Controller.isFeatureEnabled_("publicGist") ? "<b>public</b>" : "private";
 	// Insert the verification links into div#notification_message
-	var notification_text = 'This will create a ' + publicMessage + ' paste of your commit to <a href="http://gist.github.com/">http://gist.github.com/</a><br>' +
+	var notification_text = 'This will create a ' + publicMessage + ' paste of your commit to <a target="_new" href="http://gist.github.com/">http://gist.github.com/</a><br>' +
 	deleteMessage +
 	'Are you sure you want to continue?<br/><br/>' +
 	'<a href="#" onClick="hideNotification();return false;" style="color: red;">No. Cancel.</a> | ' +
@@ -89,7 +89,6 @@ var gistie = function() {
 		"file_contents[gistfile1]": commit.object.patch(),
 	};
 
-	// TODO: Replace true with private preference
 	token = Controller.getConfig_("github.token");
 	login = Controller.getConfig_("github.user");
 	if (token && login) {
@@ -97,7 +96,7 @@ var gistie = function() {
 		parameters.token = token;
 	}
 	if (!Controller.isFeatureEnabled_("publicGist"))
-		parameters.private = true;
+		parameters.action_button = 'private';
 
 	var params = [];
 	for (var name in parameters)
@@ -107,10 +106,10 @@ var gistie = function() {
 	var t = new XMLHttpRequest();
 	t.onreadystatechange = function() {
 		if (t.readyState == 4 && t.status >= 200 && t.status < 300) {
-			if (m = t.responseText.match(/<a href="\/gists\/([a-f0-9]+)\/edit">/))
+			if (m = t.responseText.match(/gist: ([a-f0-9]{6,20})/))
 				notify("Code uploaded to gistie <a target='_new' href='http://gist.github.com/" + m[1] + "'>#" + m[1] + "</a>", 1);
 			else {
-				notify("Pasting to Gistie failed :(.", -1);
+				notify("Pasting to Gistie failed. :(", -1);
 				Controller.log_(t.responseText);
 			}
 		}
