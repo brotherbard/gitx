@@ -14,6 +14,7 @@
 				F56439F60F792B2100A579C2 /* ShellScript */,
 			);
 			dependencies = (
+				AAC6960214F6D0F700501E30 /* PBXTargetDependency */,
 			);
 			name = "Generate PList Prefix";
 			productName = "Generate PList Prefix";
@@ -209,6 +210,20 @@
 			remoteInfo = gitx_askpasswd;
 		};
 		913D5E590E5564F400CECEA2 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 913D5E480E55644600CECEA2;
+			remoteInfo = "cli tool";
+		};
+		AAC695FF14F6D05B00501E30 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 913D5E480E55644600CECEA2;
+			remoteInfo = "cli tool";
+		};
+		AAC6960114F6D0F700501E30 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
 			proxyType = 1;
@@ -1052,6 +1067,7 @@
 			);
 			buildToolPath = /bin/sh;
 			dependencies = (
+				AAC6960014F6D05B00501E30 /* PBXTargetDependency */,
 			);
 			name = libgit2;
 			passBuildSettingsInEnvironment = 1;
@@ -1090,8 +1106,8 @@
 			buildRules = (
 			);
 			dependencies = (
-				551BF175112F3F3500265053 /* PBXTargetDependency */,
 				913D5E5A0E5564F400CECEA2 /* PBXTargetDependency */,
+				551BF175112F3F3500265053 /* PBXTargetDependency */,
 				F5643A020F792B4900A579C2 /* PBXTargetDependency */,
 				D8022C1A11DFE8ED003C21F6 /* PBXTargetDependency */,
 			);
@@ -1453,6 +1469,16 @@
 			target = 913D5E480E55644600CECEA2 /* cli tool */;
 			targetProxy = 913D5E590E5564F400CECEA2 /* PBXContainerItemProxy */;
 		};
+		AAC6960014F6D05B00501E30 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 913D5E480E55644600CECEA2 /* cli tool */;
+			targetProxy = AAC695FF14F6D05B00501E30 /* PBXContainerItemProxy */;
+		};
+		AAC6960214F6D0F700501E30 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 913D5E480E55644600CECEA2 /* cli tool */;
+			targetProxy = AAC6960114F6D0F700501E30 /* PBXContainerItemProxy */;
+		};
 		D8022C1A11DFE8ED003C21F6 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = D8022B1411DFCE7F003C21F6 /* libgit2 */;
@@ -1572,6 +1598,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = libgit2;
 				PRODUCT_NAME = GitX;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
 			};
@@ -1598,6 +1625,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = libgit2;
 				PRODUCT_NAME = GitX;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -1655,6 +1683,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gitx_askpasswd;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1677,6 +1706,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gitx_askpasswd;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1698,6 +1728,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gitx_askpasswd;
+				SDKROOT = macosx;
 			};
 			name = Install;
 		};
@@ -1721,6 +1752,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gitx;
+				SDKROOT = macosx;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -1744,6 +1776,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = gitx;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1755,6 +1788,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = libgit2;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1765,6 +1799,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				PRODUCT_NAME = libgit2;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1776,6 +1811,7 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				PRODUCT_NAME = "Generate PList Prefix";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1787,6 +1823,7 @@
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				INFOPLIST_PREPROCESS = YES;
 				PRODUCT_NAME = "Generate PList Prefix";
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1823,6 +1860,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = GitXTesting;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1853,6 +1891,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = GitXTesting;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
@@ -1882,7 +1921,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SpeedTest;
-				SDKROOT = macosx10.5;
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
@@ -1907,7 +1946,7 @@
 				);
 				PREBINDING = NO;
 				PRODUCT_NAME = SpeedTest;
-				SDKROOT = iphoneos2.0;
+				SDKROOT = macosx;
 				ZERO_LINK = NO;
 			};
 			name = Release;
