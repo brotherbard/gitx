@@ -33,22 +33,22 @@ var Commit = function(obj) {
 		}
 		this.header = this.raw.substring(0, messageStart);
 
-        if (typeof this.header !== 'undefined') {
-            var match = this.header.match(/\nauthor (.*) <(.*@.*|.*)> ([0-9].*)/);
-            if (typeof match !== 'undefined' && typeof match[2] !== 'undefined') {
-                if (!(match[2].match(/@[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/)))
-                    this.author_email = match[2];
+		if (typeof this.header !== 'undefined') {
+			var match = this.header.match(/\nauthor (.*) <(.*@.*|.*)> ([0-9].*)/);
+			if (typeof match !== 'undefined' && typeof match[2] !== 'undefined') {
+				if (!(match[2].match(/@[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/)))
+					this.author_email = match[2];
 
 				if (typeof match[3] !== 'undefined')
-                	this.author_date = new Date(parseInt(match[3]) * 1000);
+					this.author_date = new Date(parseInt(match[3]) * 1000);
 
-                match = this.header.match(/\ncommitter (.*) <(.*@.*|.*)> ([0-9].*)/);
+				match = this.header.match(/\ncommitter (.*) <(.*@.*|.*)> ([0-9].*)/);
 				if (typeof match[2] !== 'undefined')
 					this.committer_email = match[2];
 				if (typeof match[3] !== 'undefined')
 					this.committer_date = new Date(parseInt(match[3]) * 1000);
-            } 
-        }
+			} 
+		}
 	}
 
 	this.reloadRefs = function() {
