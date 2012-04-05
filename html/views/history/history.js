@@ -81,49 +81,55 @@ var confirm_gist = function(confirmation_message) {
 }
 
 var gistie = function() {
-	notify("Uploading code to Gistie..", 0);
+	notify("Creating a Gist...", 0);
 
-	parameters = {
-		"file_ext[gistfile1]":      "patch",
-		"file_name[gistfile1]":     commit.object.subject.replace(/[^a-zA-Z0-9]/g, "-") + ".patch",
-		"file_contents[gistfile1]": commit.object.patch(),
+	// See API at http://developer.github.com/v3/gists/
+	var filename = commit.object.subject.replace(/[^a-zA-Z0-9]+/g, "-") + ".patch";
+	var files = {};
+	files[filename] = { content: commit.object.patch() };
+	var postdata = {
+		description: 'Commit hash: ' + commit.object.realSha() + "\n" + commit.object.subject,
+		public: Controller.isFeatureEnabled_("publicGist") ? 'true' : 'false',
+		files: files,
 	};
-
-	token = Controller.getConfig_("github.token");
-	login = Controller.getConfig_("github.user");
-	if (token && login) {
-		parameters.login = login;
-		parameters.token = token;
-	}
-	if (!Controller.isFeatureEnabled_("publicGist"))
-		parameters.action_button = 'private';
-
-	var params = [];
-	for (var name in parameters)
-		params.push(encodeURIComponent(name) + "=" + encodeURIComponent(parameters[name]));
-	params = params.join("&");
 
 	var t = new XMLHttpRequest();
 	t.onreadystatechange = function() {
-		if (t.readyState == 4 && t.status >= 200 && t.status < 300) {
-			if (m = t.responseText.match(/gist: ([a-f0-9]{6,20})/))
-				notify("Code uploaded to gistie <a target='_new' href='http://gist.github.com/" + m[1] + "'>#" + m[1] + "</a>", 1);
-			else {
-				notify("Pasting to Gistie failed. :(", -1);
+		if (t.readyState == 4) { // The request is complete
+		  if (t.status == 201) {
+				var responseJson = JSON.parse(t.responseText);
+				var gistURL = responseJson.html_url;
+				try {
+					notify("Gist posted: <a target='_new' href='" + gistURL + "'>" + gistURL + "</a>", 1);
+				} catch (e) {
+					notify("Gist creation failed: " + e + "; \n" + t.responseText, -1);
+					Controller.log_(t.responseText);
+				}
+			} else {
+				notify("Gist creation failed with HTTP " + t.status + ": " + e + "; \n" + t.responseText, -1);
+				Controller.log_(t.status);
 				Controller.log_(t.responseText);
 			}
 		}
 	}
 
-	t.open('POST', "https://gist.github.com/gists");
-	t.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-	t.setRequestHeader('Accept', 'text/javascript, text/html, application/xml, text/xml, */*');
-	t.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+	t.open('POST', "https://api.github.com/gists");
+	t.setRequestHeader('Accept', 'application/json');
+
+	/* GitHub v3 API doesn't support the API token and instead requires OAuth2 tokens.
+	token = Controller.getConfig_("github.token");
+	login = Controller.getConfig_("github.user");
+	if (token && login) {
+		postdata.login = login;
+		postdata.token = token;
+		t.setRequestHeader('application/json');
+	}
+	*/
 
 	try {
-		t.send(params);
+		t.send(JSON.stringify(postdata));
 	} catch(e) {
-		notify("Pasting to Gistie failed: " + e, -1);
+		notify("Failed to send JSON when sending the Gist data: " + e, -1);
 	}
 }
 
