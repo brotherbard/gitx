@@ -80,7 +80,84 @@ var confirm_gist = function(confirmation_message) {
 	$("spinner").style.display = "none";
 }
 
-var gistie = function() {
+var storage = {
+	setKey: function(key, value) {
+		return createCookie(key, value, 365 * 10);
+	},
+
+	getKey: function(key) {
+		return readCookie(key);
+	},
+
+	deleteKey: function(key) {
+		return eraseCookie(key);
+	},
+};
+
+// See http://developer.github.com/v3/oauth/
+var gistAuth = function() {
+	var login = Controller.getConfig_("github.user");
+	if (login) {
+		var password = prompt("Enter GitHub password for " + login + " to authroize GitX to post gists:");
+		if (!password || password.length == 0) {
+			return gistie(true);
+		}
+
+		notify("Authenticating...", 0);
+
+		var t = new XMLHttpRequest();
+		t.onload = function() {
+			if (t.status == 201) {
+				try {
+					var jsonResponse = JSON.parse(t.responseText);
+					storage.setKey('oauth2token', jsonResponse.token);
+					gistie();
+				} catch (e) {
+					authFailover("During parse: " + t.responseText);
+				}
+			} else {
+				authFailover("Wrong status code (" + t.status + "): " + t.responseText);
+			}
+		}
+
+		var jsonRequest = {
+			scopes: 'gist',
+			note: 'GitX'
+		};
+
+		t.open('POST', "https://api.github.com/authorizations");
+		t.setRequestHeader('Accept', 'application/json');
+		t.setRequestHeader('Authorization', makeBasicAuth(login, password));
+		t.send(JSON.stringify(jsonRequest));
+	}
+
+	function authFailover(errorMessage) {
+		notify("Authentication failed; creating an anonymous gist.", 0);
+		Controller.log_(errorMessage);
+		setTimeout(function() {
+			gistie(true);
+		}, 1000);
+	}
+
+	function makeBasicAuth(user, password) {
+		var tok = user + ':' + password;
+		var hash = Base64.encode(tok);
+		return "Basic " + hash;
+	}
+
+}
+
+var needsGithubPassword = function() {
+	var login = Controller.getConfig_("github.user");
+	var token = storage.getKey('oauth2token');
+
+	return login && !token;
+}
+
+var gistie = function(skipAuth) {
+	if (!skipAuth && needsGithubPassword())
+		return gistAuth();
+
 	notify("Creating a Gist...", 0);
 
 	// See API at http://developer.github.com/v3/gists/
@@ -88,43 +165,39 @@ var gistie = function() {
 	var files = {};
 	files[filename] = { content: commit.object.patch() };
 	var postdata = {
-		description: 'Commit hash: ' + commit.object.realSha() + "\n" + commit.object.subject,
+		description: commit.object.subject + " : " + commit.object.realSha(),
 		public: Controller.isFeatureEnabled_("publicGist") ? 'true' : 'false',
 		files: files,
 	};
 
 	var t = new XMLHttpRequest();
-	t.onreadystatechange = function() {
-		if (t.readyState == 4) { // The request is complete
-		  if (t.status == 201) {
-				var responseJson = JSON.parse(t.responseText);
-				var gistURL = responseJson.html_url;
-				try {
-					notify("Gist posted: <a target='_new' href='" + gistURL + "'>" + gistURL + "</a>", 1);
-				} catch (e) {
-					notify("Gist creation failed: " + e + "; \n" + t.responseText, -1);
-					Controller.log_(t.responseText);
-				}
-			} else {
-				notify("Gist creation failed with HTTP " + t.status + ": " + e + "; \n" + t.responseText, -1);
-				Controller.log_(t.status);
+	t.onload = function() {
+		if (t.status == 201) {
+			var responseJson = JSON.parse(t.responseText);
+			var gistURL = responseJson.html_url;
+			try {
+				notify("Gist posted: <a target='_new' href='" + gistURL + "'>" + gistURL + "</a>", 1);
+			} catch (e) {
+				notify("Gist creation failed: " + e + "; \n" + t.responseText, -1);
 				Controller.log_(t.responseText);
 			}
+		} else if (t.status == 401) { // Authentication fail
+			// Clear out our saved credentials, since they're not working
+			storage.deleteKey('oauth2token');
+			gistAuth();
+		} else {
+			notify("Gist creation failed with HTTP " + t.status + ": " + t.responseText, -1);
+			Controller.log_(t.status);
+			Controller.log_(t.responseText);
 		}
-	}
+	};
 
 	t.open('POST', "https://api.github.com/gists");
 	t.setRequestHeader('Accept', 'application/json');
-
-	/* GitHub v3 API doesn't support the API token and instead requires OAuth2 tokens.
-	token = Controller.getConfig_("github.token");
-	login = Controller.getConfig_("github.user");
-	if (token && login) {
-		postdata.login = login;
-		postdata.token = token;
-		t.setRequestHeader('application/json');
+	var token = storage.getKey('oauth2token');
+	if (token) {
+		t.setRequestHeader('Authorization', 'token ' + token);
 	}
-	*/
 
 	try {
 		t.send(JSON.stringify(postdata));
