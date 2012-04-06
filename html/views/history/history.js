@@ -33,22 +33,22 @@ var Commit = function(obj) {
 		}
 		this.header = this.raw.substring(0, messageStart);
 
-        if (typeof this.header !== 'undefined') {
-            var match = this.header.match(/\nauthor (.*) <(.*@.*|.*)> ([0-9].*)/);
-            if (typeof match !== 'undefined' && typeof match[2] !== 'undefined') {
-                if (!(match[2].match(/@[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/)))
-                    this.author_email = match[2];
+		if (typeof this.header !== 'undefined') {
+			var match = this.header.match(/\nauthor (.*) <(.*@.*|.*)> ([0-9].*)/);
+			if (typeof match !== 'undefined' && typeof match[2] !== 'undefined') {
+				if (!(match[2].match(/@[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}/)))
+					this.author_email = match[2];
 
 				if (typeof match[3] !== 'undefined')
-                	this.author_date = new Date(parseInt(match[3]) * 1000);
+					this.author_date = new Date(parseInt(match[3]) * 1000);
 
-                match = this.header.match(/\ncommitter (.*) <(.*@.*|.*)> ([0-9].*)/);
+				match = this.header.match(/\ncommitter (.*) <(.*@.*|.*)> ([0-9].*)/);
 				if (typeof match[2] !== 'undefined')
 					this.committer_email = match[2];
 				if (typeof match[3] !== 'undefined')
 					this.committer_date = new Date(parseInt(match[3]) * 1000);
-            } 
-        }
+			} 
+		}
 	}
 
 	this.reloadRefs = function() {
@@ -66,10 +66,10 @@ var confirm_gist = function(confirmation_message) {
 
 	// Set optional confirmation_message
 	confirmation_message = confirmation_message || "Yes. Paste this commit.";
-	var deleteMessage = Controller.getConfig_("github.token") ? " " : "You might not be able to delete it after posting.<br>";
+	var deleteMessage = Controller.getConfig_("github.token") ? " " : 'Since your <a target="_new" href="http://help.github.com/mac-set-up-git/#_set_up_your_info">github token</a> is not set, you will not be able to delete it.<br>';
 	var publicMessage = Controller.isFeatureEnabled_("publicGist") ? "<b>public</b>" : "private";
 	// Insert the verification links into div#notification_message
-	var notification_text = 'This will create a ' + publicMessage + ' paste of your commit to <a href="http://gist.github.com/">http://gist.github.com/</a><br>' +
+	var notification_text = 'This will create a ' + publicMessage + ' paste of your commit to <a target="_new" href="http://gist.github.com/">http://gist.github.com/</a><br>' +
 	deleteMessage +
 	'Are you sure you want to continue?<br/><br/>' +
 	'<a href="#" onClick="hideNotification();return false;" style="color: red;">No. Cancel.</a> | ' +
@@ -80,51 +80,129 @@ var confirm_gist = function(confirmation_message) {
 	$("spinner").style.display = "none";
 }
 
-var gistie = function() {
-	notify("Uploading code to Gistie..", 0);
+var storage = {
+	setKey: function(key, value) {
+		return createCookie(key, value, 365 * 10);
+	},
 
-	parameters = {
-		"file_ext[gistfile1]":      "patch",
-		"file_name[gistfile1]":     commit.object.subject.replace(/[^a-zA-Z0-9]/g, "-") + ".patch",
-		"file_contents[gistfile1]": commit.object.patch(),
-	};
+	getKey: function(key) {
+		return readCookie(key);
+	},
 
-	// TODO: Replace true with private preference
-	token = Controller.getConfig_("github.token");
-	login = Controller.getConfig_("github.user");
-	if (token && login) {
-		parameters.login = login;
-		parameters.token = token;
-	}
-	if (!Controller.isFeatureEnabled_("publicGist"))
-		parameters.private = true;
+	deleteKey: function(key) {
+		return eraseCookie(key);
+	},
+};
 
-	var params = [];
-	for (var name in parameters)
-		params.push(encodeURIComponent(name) + "=" + encodeURIComponent(parameters[name]));
-	params = params.join("&");
+// See http://developer.github.com/v3/oauth/
+var gistAuth = function() {
+	var login = Controller.getConfig_("github.user");
+	if (login) {
+		var password = prompt("Enter GitHub password for " + login + " to authroize GitX to post gists:");
+		if (!password || password.length == 0) {
+			return gistie(true);
+		}
 
-	var t = new XMLHttpRequest();
-	t.onreadystatechange = function() {
-		if (t.readyState == 4 && t.status >= 200 && t.status < 300) {
-			if (m = t.responseText.match(/<a href="\/gists\/([a-f0-9]+)\/edit">/))
-				notify("Code uploaded to gistie <a target='_new' href='http://gist.github.com/" + m[1] + "'>#" + m[1] + "</a>", 1);
-			else {
-				notify("Pasting to Gistie failed :(.", -1);
-				Controller.log_(t.responseText);
+		notify("Authenticating...", 0);
+
+		var t = new XMLHttpRequest();
+		t.onload = function() {
+			if (t.status == 201) {
+				try {
+					var jsonResponse = JSON.parse(t.responseText);
+					storage.setKey('oauth2token', jsonResponse.token);
+					gistie();
+				} catch (e) {
+					authFailover("During parse: " + t.responseText);
+				}
+			} else {
+				authFailover("Wrong status code (" + t.status + "): " + t.responseText);
 			}
 		}
+
+		var jsonRequest = {
+			scopes: 'gist',
+			note: 'GitX'
+		};
+
+		t.open('POST', "https://api.github.com/authorizations");
+		t.setRequestHeader('Accept', 'application/json');
+		t.setRequestHeader('Authorization', makeBasicAuth(login, password));
+		t.send(JSON.stringify(jsonRequest));
 	}
 
-	t.open('POST', "https://gist.github.com/gists");
-	t.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-	t.setRequestHeader('Accept', 'text/javascript, text/html, application/xml, text/xml, */*');
-	t.setRequestHeader('Content-type', 'application/x-www-form-urlencoded;charset=UTF-8');
+	function authFailover(errorMessage) {
+		notify("Authentication failed; creating an anonymous gist.", 0);
+		Controller.log_(errorMessage);
+		setTimeout(function() {
+			gistie(true);
+		}, 1000);
+	}
+
+	function makeBasicAuth(user, password) {
+		var tok = user + ':' + password;
+		var hash = Base64.encode(tok);
+		return "Basic " + hash;
+	}
+
+}
+
+var needsGithubPassword = function() {
+	var login = Controller.getConfig_("github.user");
+	var token = storage.getKey('oauth2token');
+
+	return login && !token;
+}
+
+var gistie = function(skipAuth) {
+	if (!skipAuth && needsGithubPassword())
+		return gistAuth();
+
+	notify("Creating a Gist...", 0);
+
+	// See API at http://developer.github.com/v3/gists/
+	var filename = commit.object.subject.replace(/[^a-zA-Z0-9]+/g, "-") + ".patch";
+	var files = {};
+	files[filename] = { content: commit.object.patch() };
+	var postdata = {
+		description: commit.object.subject + " : " + commit.object.realSha(),
+		public: Controller.isFeatureEnabled_("publicGist") ? 'true' : 'false',
+		files: files,
+	};
+
+	var t = new XMLHttpRequest();
+	t.onload = function() {
+		if (t.status == 201) {
+			var responseJson = JSON.parse(t.responseText);
+			var gistURL = responseJson.html_url;
+			try {
+				notify("Gist posted: <a target='_new' href='" + gistURL + "'>" + gistURL + "</a>", 1);
+			} catch (e) {
+				notify("Gist creation failed: " + e + "; \n" + t.responseText, -1);
+				Controller.log_(t.responseText);
+			}
+		} else if (t.status == 401) { // Authentication fail
+			// Clear out our saved credentials, since they're not working
+			storage.deleteKey('oauth2token');
+			gistAuth();
+		} else {
+			notify("Gist creation failed with HTTP " + t.status + ": " + t.responseText, -1);
+			Controller.log_(t.status);
+			Controller.log_(t.responseText);
+		}
+	};
+
+	t.open('POST', "https://api.github.com/gists");
+	t.setRequestHeader('Accept', 'application/json');
+	var token = storage.getKey('oauth2token');
+	if (token) {
+		t.setRequestHeader('Authorization', 'token ' + token);
+	}
 
 	try {
-		t.send(params);
+		t.send(JSON.stringify(postdata));
 	} catch(e) {
-		notify("Pasting to Gistie failed: " + e, -1);
+		notify("Failed to send JSON when sending the Gist data: " + e, -1);
 	}
 }
 
