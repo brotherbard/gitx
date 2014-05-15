@@ -10,8 +10,11 @@
 #import "PBHistorySearchController.h"
 
 #define kDefaultVerticalLineLength 50
+#define kDefaultSplitVerticalLineLength 76
 #define kCommitMessageViewVerticalLineLength @"PBCommitMessageViewVerticalLineLength"
 #define kCommitMessageViewHasVerticalLine @"PBCommitMessageViewHasVerticalLine"
+#define kCommitMessageViewHasSplitVerticalLine @"PBCommitMessageViewHasSplitVerticalLine"
+#define kCommitMessageViewSplitVerticalLineLength @"PBCommitMessageViewSplitVerticalLineLength"
 #define kEnableGist @"PBEnableGist"
 #define kEnableGravatar @"PBEnableGravatar"
 #define kConfirmPublicGists @"PBConfirmPublicGists"
@@ -37,6 +40,10 @@
                       forKey:kCommitMessageViewVerticalLineLength];
     [defaultValues setObject:[NSNumber numberWithBool:YES]
                       forKey:kCommitMessageViewHasVerticalLine];
+	[defaultValues setObject:[NSNumber numberWithInt:kDefaultSplitVerticalLineLength]
+					  forKey:kCommitMessageViewSplitVerticalLineLength];
+	[defaultValues setObject:[NSNumber numberWithBool:NO]
+					  forKey:kCommitMessageViewHasSplitVerticalLine];
 	[defaultValues setObject:[NSNumber numberWithBool:YES]
 			  forKey:kEnableGist];
 	[defaultValues setObject:[NSNumber numberWithBool:YES]
@@ -68,6 +75,16 @@
 + (BOOL) commitMessageViewHasVerticalLine
 {
 	return [[NSUserDefaults standardUserDefaults] boolForKey:kCommitMessageViewHasVerticalLine];
+}
+
++ (int) commitMessageViewSplitVerticalLineLength
+{
+	return [[NSUserDefaults standardUserDefaults] integerForKey:kCommitMessageViewSplitVerticalLineLength];
+}
+
++ (BOOL) commitMessageViewHasSplitVerticalLine
+{
+	return [[NSUserDefaults standardUserDefaults] boolForKey:kCommitMessageViewHasSplitVerticalLine];
 }
 
 + (BOOL) isGistEnabled

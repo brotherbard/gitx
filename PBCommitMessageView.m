@@ -18,8 +18,8 @@
 	// draw a vertical line after the given size (used as an indicator
 	// for the first line of the commit message)
     if ([PBGitDefaults commitMessageViewHasVerticalLine]) {
-        float characterWidth = [@" " sizeWithAttributes:[self typingAttributes]].width;
-        float lineWidth = characterWidth * [PBGitDefaults commitMessageViewVerticalLineLength];
+        NSSize characterSize = [@" " sizeWithAttributes:[self typingAttributes]];
+        float lineWidth = characterSize.width * [PBGitDefaults commitMessageViewVerticalLineLength];
 
         [[NSColor lightGrayColor] set];
         float padding = [[self textContainer] lineFragmentPadding];
@@ -27,7 +27,24 @@
         line.origin.x = padding + lineWidth;
         line.origin.y = 0;
         line.size.width = 1;
-        line.size.height = [self bounds].size.height;
+		if ([PBGitDefaults commitMessageViewHasSplitVerticalLine]) {
+			line.size.height = characterSize.height;
+			NSRectFill(line);
+			line.origin.y = characterSize.height;
+			lineWidth = characterSize.width * [PBGitDefaults commitMessageViewSplitVerticalLineLength];
+			line.size.width = padding + lineWidth - line.origin.x;
+			line.size.height = 1;
+			if (line.size.width < 0) {
+				line.origin.x = padding + lineWidth + 1;
+				line.size.width = -line.size.width;
+			}
+			NSRectFill(line);
+			line.origin.x = padding + lineWidth;
+			line.size.width = 1;
+			line.size.height = [self bounds].size.height - characterSize.height;
+		} else {
+			line.size.height = [self bounds].size.height;
+		}
         NSRectFill(line);
     }
 }

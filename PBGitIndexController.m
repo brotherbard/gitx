@@ -106,6 +106,12 @@
 	[openItem setRepresentedObject:selectedFiles];
 	[menu addItem:openItem];
 
+    NSString *deleteTitle = [selectedFiles count] == 1 ? @"Delete file" : @"Delete files";
+	NSMenuItem *deleteItem = [[NSMenuItem alloc] initWithTitle:deleteTitle action:@selector(deleteFilesAction:) keyEquivalent:@""];
+	[deleteItem setTarget:self];
+	[deleteItem setRepresentedObject:selectedFiles];
+	[menu addItem:deleteItem];
+    
 	// Attempt to ignore
 	if ([self allSelectedCanBeIgnored:selectedFiles]) {
 		NSString *ignoreText = [selectedFiles count] == 1 ? @"Ignore File": @"Ignore Files";
@@ -160,6 +166,27 @@
 	for (PBChangedFile *file in files)
 		[[NSWorkspace sharedWorkspace] openFile:[workingDirectory stringByAppendingPathComponent:[file path]]];
 }
+
+- (void) deleteFilesAction:(id) sender
+{
+	NSArray *files = [sender representedObject];
+	NSString *workingDirectory = [commitController.repository workingDirectory];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    
+    NSAlert *alert = [NSAlert alertWithMessageText:@"Delete file"
+                                     defaultButton:nil
+                                   alternateButton:@"Cancel"
+                                       otherButton:nil
+                         informativeTextWithFormat:@"Are you sure you wish to delete selected files?\n\nYou cannot undo this operation."];
+
+    if ([alert runModal] == NSOKButton) {
+        for (PBChangedFile *file in files)
+            [fileManager removeItemAtPath:[workingDirectory stringByAppendingPathComponent:[file path]] error:NULL];
+        [commitController.index refresh];
+    }
+    [alert release];
+}
+
 
 - (void) ignoreFilesAction:(id) sender
 {
