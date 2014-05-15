@@ -23,8 +23,10 @@
 {
 	NSPanel*			mPasswordPanel;
 	NSSecureTextField*	mPasswordField;
+	NSString*			mTitle;
 }
 
+- (id) initWithTitle:(NSString*) title;
 -(NSPanel*)		passwordPanel;
 
 -(IBAction)	doOKButton: (id)sender;
@@ -34,6 +36,17 @@
 
 
 @implementation GAPAppDelegate
+
+
+- (id) initWithTitle:(NSString*) title
+{
+	self = [super init];
+	if (self != nil) {
+		mTitle = title;
+	}
+	return self;
+}
+
 
 -(NSPanel*)	passwordPanel
 {
@@ -67,7 +80,7 @@
 		[okButton setBordered: YES];
 		[okButton setBezelStyle: NSRoundedBezelStyle];
 		[[mPasswordPanel contentView] addSubview: okButton];
-
+		
 		// Cancel:
 		NSRect	cancelBox = box;
 		cancelBox.origin.x = NSMinX( okBox ) -CANCELBUTTONWIDTH -6;
@@ -109,7 +122,7 @@
 		[passwordLabel setBordered: NO];
 		[passwordLabel setBezeled: NO];
 		[passwordLabel setDrawsBackground: NO];
-		[passwordLabel setStringValue: @"Please enter your password:"];	// +++ Localize.
+		[passwordLabel setStringValue: mTitle];	// +++ Localize.
 		[[mPasswordPanel contentView] addSubview: passwordLabel];
 		
 		// GitX icon:
@@ -153,14 +166,21 @@ int	main( int argc, const char** argv )
 {
 	// close stderr to stop cocoa log messages from being picked up by GitX
 	close(STDERR_FILENO);
-	
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	
 	ProcessSerialNumber	myPSN = { 0, kCurrentProcess };
 	TransformProcessType( &myPSN, kProcessTransformToForegroundApplication );
 	
 	NSApplication *app = [NSApplication sharedApplication];
-	GAPAppDelegate *appDel = [[GAPAppDelegate alloc] init];
+	
+	NSString * title = nil;
+	if (argc > 1) {
+		title = [NSString stringWithFormat:@"Please enter your %@", [[NSString stringWithUTF8String:argv[1]] lowercaseString]];
+	} else {
+		title = @"Please enter your password:";
+	}
+	
+	GAPAppDelegate *appDel = [[GAPAppDelegate alloc] initWithTitle:title];
 	[app setDelegate: appDel];
 	NSWindow *passPanel = [appDel passwordPanel];
 	
